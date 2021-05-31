@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<!-- Mirrored from demo.lorvent.com/fitness/add_users.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 11 Apr 2021 12:41:46 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+<head>
+    <head th:replace="fragment :: head"></head>
+
+    <link type="text/css" href="css/custom_css/fitness.css" rel="stylesheet"/>
+    <link type="text/css" href="css/custom_css/panel.css" rel="stylesheet"/>
+    <!-- end of global css -->
+    <!--page level css -->
+    <link type="text/css" href="vendors/jasny-bootstrap/css/jasny-bootstrap.css" rel="stylesheet"/>
+    <link type="text/css" href="vendors/iCheck/skins/minimal/blue.css" rel="stylesheet"/>
+    <link type="text/css" href="vendors/select2/css/select2.css" rel="stylesheet"/>
+    <link type="text/css" href="vendors/select2/css/select2-bootstrap.min.css" rel="stylesheet"/>
+    <link type="text/css" href="vendors/bootstrapvalidator/dist/css/bootstrapValidator.css" rel="stylesheet"/>
+    <link type="text/css" href="vendors/sweetalert/dist/sweetalert2.css" rel="stylesheet"/>
+    <link type="text/css" href="css/custom_css/add_users.css" rel="stylesheet"/>
+    <link type="text/css" href="css/custom_css/style.css" rel="stylesheet">
+    <!--end of page level css-->
+</head>
+
+<body>
+<div class="se-pre-con"></div>
+<!-- header logo: style can be found in header-->
+<header th:replace="fragment :: header" class="header">
+</header>
+<div class="wrapper row-offcanvas row-offcanvas-left">
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="left-side sidebar-offcanvas">
+        <!-- sidebar: style can be found in sidebar-->
+        <section class="sidebar">
+            <div id="menu" role="navigation">
+                <div class="nav_profile">
+                    <div class="media profile-left">
+                        <a class="pull-left profile-thumb" href="#">
+                            <img src="img/authors/avatar1.jpg" class="img-circle" alt="User Image">
+                        </a>
+                        <div class="content-profile">
+                            <h4 class="media-heading name"></h4>
+                            <span class="text-default role"></span>
+                        </div>
+                    </div>
+                </div>
+                <ul class="navigation">
+                    <li>
+                        <a th:href="@{/index-2}">
+                            <i class="text-primary menu-icon fa fa-fw fa-dashboard"></i>
+                            <span class="mm-text ">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin_clubinfo}">
+                            <i class="text-success menu-icon fa fa-fw fa-info-circle"></i>
+                            <span class="mm-text">Club Info</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/receipt}">
+                            <i class="text-success menu-icon fa fa-life-ring fa-info-circle"></i>
+                            <span class="mm-text">Receipt</span>
+                        </a>
+                    </li>
+                    <li class="menu-dropdown">
+                        <a href="#">
+                            <i class="text-danger menu-icon fa fa-fw fa-calendar"></i>
+                            <span class="mm-text">Events</span>
+                            <span class="fa fa-angle-down pull-right"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a th:href="@{/events_list}">
+                                    <i class="text-primary menu-icon fa fa-fw fa-list"></i> Events List
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/event_item}">
+                                    <i class="text-info menu-icon fa fa-fw fa-fast-forward"></i> Event Item
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-dropdown">
+                        <a href="#">
+                            <i class="text-warning menu-icon fa fa-fw fa-graduation-cap"></i>
+                            <span class="mm-text">Course Schedule</span>
+                            <span class="fa fa-angle-down pull-right"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a th:href="@{/admin_courseschedule}">
+                                    <i class="text-primary fa fa-fw fa-th"></i> Course Schedule
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/courses}">
+                                    <i class="text-success fa fa-fw fa-indent"></i> Courses
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin_rooms}">
+                                    <i class="text-info fa fa-fw fa-star"></i> Rooms
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin_trainers}">
+                            <i class="text-success menu-icon fa fa-fw fa-paw fa-info-circle"></i>
+                            <span class="mm-text">Trainers</span>
+                        </a>
+                    </li>
+                    <li class="menu-dropdown">
+                        <a href="#">
+                            <i class="text-default menu-icon fa fa-fw fa-users"></i>
+                            <span class="mm-text">Users</span>
+                            <span class="fa fa-angle-down pull-right"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a th:href="@{/admin_userlist}">
+                                    <i class="text-primary fa fa-fw fa-users"></i> Users List
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin_userprofile}">
+                                    <i class="text-success fa fa-fw fa-user"></i> User Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/add_users}">
+                                    <i class="text-info fa fa-fw fa-user"></i> Add Users
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin_userpayment}">
+                                    <i class="text-danger fa fa-fw fa-money"></i> Payments
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-dropdown">
+                        <a href="#">
+                            <i class="text-default menu-icon fa fa-fw fa-users"></i>
+                            <span class="mm-text">Customers</span>
+                            <span class="fa fa-angle-down pull-right"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a th:href="@{/admin_customerslist}">
+                                    <i class="text-primary fa fa-fw fa-users"></i> Customers List
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin_customersprofile}">
+                                    <i class="text-success fa fa-fw fa-user"></i> Customers Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/add_customers}">
+                                    <i class="text-info fa fa-fw fa-user"></i> Add Customers
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin_customerpayment}">
+                                    <i class="text-danger fa fa-fw fa-money"></i> Payments
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin_coupon}">
+                            <i class="text-primary  menu-icon fa fa-scissors"></i>
+                            <span class="mm-text">Coupons</span>
+                        </a>
+                    </li>
+                    <li class="menu-dropdown">
+                        <a href="#">
+                            <i class="text-success menu-icon fa fa-fw fa-picture-o"></i>
+                            <span class="mm-text">Gallery</span>
+                            <span class="fa fa-angle-down pull-right"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a th:href="@{/add_gallery}">
+                                    <i class="text-primary fa fa-fw fa-cloud-upload"></i> Add Gallery
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/gallery}">
+                                    <i class="text-success fa fa-fw fa-file-image-o"></i> Gallery
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin_timings}">
+                            <i class="text-info menu-icon fa fa-fw fa-clock-o"></i>
+                            <span class="mm-text">Class Calendar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin_login}">
+                            <i class="text-danger menu-icon fa fa-sign-in"></i>
+                            <span class="mm-text">Login</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="404.html">
+                            <i class="text-warning menu-icon fa fa-anchor"></i>
+                            <span class="mm-text">404</span>
+                        </a>
+                    </li>
+                    <li class="menu-dropdown active">
+                        <a href="#">
+                            <i class="text-success menu-icon fa fa-fw fa-question-circle"></i>
+                            <span class="mm-text">FAQ</span>
+                            <span class="fa fa-angle-down pull-right"></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a th:href="@{/faq}">
+                                    <i class="text-primary fa fa-fw fa-question-circle"></i> FAQ
+                                </a>
+                            </li>
+                            <li class="active" id="active">
+                                <a th:href="@{/add_faq}">
+                                    <i class="text-success fa fa-fw fa-question"></i> Add Faq
+                                    <span class="arrow"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- / .navigation -->
+            </div>
+            <!-- menu -->
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <aside class="right-side right-padding">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <!--section starts-->
+            <h2>Add User</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="index-2.html">
+                        <i class="fa fa-fw fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Users</a>
+                </li>
+                <li>
+                    <a href="add_users.html" class="activated">Add User</a>
+                </li>
+            </ol>
+        </section>
+        <!--section ends-->
+        <div class="container-fluid">
+            <!--main content-->
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Basic charts strats here-->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <i class="fa fa-fw fa-user"></i> Add Customer
+                            </h4>
+                            <span class="pull-right">
+                                    <i class="glyphicon glyphicon-chevron-up showhide clickable"></i>
+                                    <i class="glyphicon glyphicon-remove removepanel"></i>
+                                </span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="add_customers_form" method="post" th:action="@{/api/customers/add}" class="form-horizontal">
+                                        <div class="form-body">
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="name">
+                                                    Name
+                                                    <span class='require'>*</span>
+                                                </label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-fw fa-user-md text-primary"></i>
+                                                            </span>
+                                                        <input type="text" class="form-control" id="name"
+                                                               placeholder="Enter Name" name="name">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="mail">
+                                                    Email
+                                                    <span class='require'>*</span>
+                                                </label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-envelope text-primary"></i>
+                                                            </span>
+                                                        <input type="email" placeholder="Email Address"
+                                                               class="form-control" id="mail" name="email"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="phone">
+                                                    Contact Number
+                                                    <span class='require'>*</span>
+                                                </label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-fw fa-phone text-primary"></i>
+                                                            </span>
+                                                        <input type="text" placeholder="Phone Number" id="phone"
+                                                               class="form-control" name="phone"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="dob">
+                                                    Date Of Birth
+                                                    <span class='require'>*</span>
+                                                </label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-fw fa-calendar text-primary"></i>
+                                                            </span>
+                                                        <input type="text" class="form-control" id="dob"
+                                                               placeholder="( Example: 2021/05/13 )" name="dob" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="register_date">
+                                                    Register Date
+                                                    <span class='require'>*</span>
+                                                </label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-fw fa-calendar text-primary"></i>
+                                                            </span>
+                                                        <input type="text" class="form-control" id="register_date"
+                                                               placeholder="( Example: 2021/05/13 )" name="register_date" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label" for="level">
+                                                    Level
+                                                    <span class='require'>*</span>
+                                                </label>
+                                                <div class="col-md-7">
+                                                    <div class="input-group">
+                                                            <span class="input-group-addon">
+                                                                <i class="fa fa-fw fa-user-md text-primary"></i>
+                                                            </span>
+                                                        <input type="text" class="form-control" id="level"
+                                                               placeholder="Enter Level" name="level" required/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <input type="submit" id="save" class="btn btn-primary" value="Save">
+                                                    <input type="button" onclick='location.replace( "/../admin_customerlist")' class="btn btn-danger" value="Cancel"> &nbsp;
+                                                    <input type="reset" onclick="$(form).data('bootstrapValidator').resetForm();" class="btn btn-default " value="Reset">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- col-md-6 -->
+            <!--row -->
+            <!--row ends-->
+        </div>
+        <!-- /.content -->
+    </aside>
+    <!-- /.right-side -->
+</div>
+<!-- /.right-side -->
+<!-- ./wrapper -->
+<!-- global js -->
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<script src="js/custom_js/app.js" type="text/javascript"></script>
+<script src="js/custom_js/metisMenu.js" type="text/javascript"></script>
+<script src="vendors/holder/holder.js" type="text/javascript"></script>
+<!-- end of page level js -->
+<!-- begining of page level js -->
+<script src="vendors/jasny-bootstrap/js/jasny-bootstrap.js" type="text/javascript"></script>
+<script src="vendors/iCheck/icheck.js" type="text/javascript"></script>
+<script src="vendors/select2/js/select2.min.js" type="text/javascript"></script>
+<script src="vendors/bootstrapvalidator/dist/js/bootstrapValidator.js" type="text/javascript"></script>
+<script src="vendors/sweetalert/dist/sweetalert2.js" type="text/javascript"></script>
+<script src="js/custom_js/add_customers.js" type="text/javascript"></script>
+<script src="js/custom_js/setName.js" type="text/javascript"></script>
+<!-- end of page level js -->
+<script>
+</script>
+</body>
+
+
+<!-- Mirrored from demo.lorvent.com/fitness/add_users.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 11 Apr 2021 12:41:49 GMT -->
+</html>

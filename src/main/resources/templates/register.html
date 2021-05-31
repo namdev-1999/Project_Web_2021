@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+
+<!-- Mirrored from demo.lorvent.com/fitness/admin_login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 11 Apr 2021 12:42:15 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=UTF-8"/><!-- /Added by HTTrack -->
+<head>
+    <title>Sign Up | Fit2Go Admin Template</title>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- global level css -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <!-- end of global css-->
+    <!-- page level styles-->
+    <link href="vendors/iCheck/skins/all.css" rel="stylesheet" type="text/css">
+    <link type="text/css" href="vendors/bootstrapvalidator/dist/css/bootstrapValidator.css" rel="stylesheet"/>
+    <link href="css/custom_css/admin-login.css" rel="stylesheet" type="text/css">
+    <!-- end of page level styles-->
+</head>
+
+<body>
+<div class="container">
+    <div class="full-content-center">
+        <div class="box bounceInLeft animated">
+            <img src="img/logo.png" class="logo" alt="image not found">
+            <h3 class="text-center">Register</h3>
+            <div th:if="${error != null}">
+                <p class="text-danger">[[${error}]]</p>
+            </div>
+            <div th:if="${message != null}">
+                <p class="text-warning">[[${message}]]</p>
+            </div>
+            <form class="form" id="register" method="post" th:action="@{/register}">
+                <div class="form-group">
+                    <label class="sr-only"></label>
+                    <input type="email" class="form-control" name="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only"></label>
+                    <input type="text" class="form-control" name="name" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only"></label>
+                    <input type="text" class="form-control" name="phone" placeholder="Contact Number" required>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only"></label>
+                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                </div>
+                <div class="checkbox text-left">
+                    <label>
+                        <input type="checkbox"> I agree with <a class="text-warning forgot_color">Terms and Conditions</a>
+                    </label>
+                </div>
+                <input type="submit" class="btn btn-block btn-warning" value="Sign Up">
+            </form>
+            <p class="text-right text-primary">Already have an account?<a th:href="@{/admin_login}" class="text-warning forgot_color">Log In</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- global js -->
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
+<!-- end of global js -->
+<!-- begining of page level js -->
+<script src="vendors/iCheck/icheck.min.js" type="text/javascript"></script>
+<script src="vendors/bootstrapvalidator/dist/js/bootstrapValidator.js" type="text/javascript"></script>
+<script src="js/custom_js/register.js" type="text/javascript"></script>
+<!-- end of page level js -->
+</body>
+
+
+<!-- Mirrored from demo.lorvent.com/fitness/admin_login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 11 Apr 2021 12:42:15 GMT -->
+</html>
