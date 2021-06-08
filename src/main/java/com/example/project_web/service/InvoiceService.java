@@ -61,6 +61,7 @@ public class InvoiceService {
         i.setContain(invoice.getContain());
         i.setTotal(invoice.getTotal());
         i.setDate(invoice.getDate());
+        i.setCustomer(invoice.getCustomer());
         invoiceRepository.save(i);
     }
 

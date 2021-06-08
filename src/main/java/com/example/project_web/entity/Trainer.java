@@ -18,13 +18,13 @@ public class Trainer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column
+    @Column(length = 60, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String phone;
 
-    @Column
+    @Column(length = 10,nullable = false)
     @Temporal(value = TemporalType.DATE)
     private Date dob;
 

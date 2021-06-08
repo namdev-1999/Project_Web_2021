@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -40,8 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()// Từ spring security 5 csrf mặc định là "enable()"
                 .authorizeRequests()
                 .antMatchers("/login","/","/resources/static/**").anonymous()
-                .antMatchers( "/resources/admin**").hasAuthority("ADMIN")
-                .antMatchers("/index","/admin**").hasAuthority("ADMIN")
+//                .antMatchers( "/resources/admin**").hasAuthority("ADMIN")
+                .antMatchers("/index","/admin**").hasAnyAuthority("ADMIN","TRAINER","MODE")
+                .antMatchers("/admin_timings").hasAuthority("TRAINER")
+                .antMatchers("/admin_userlist").hasAuthority("MODE")
                 .and()
                 .formLogin()
                 .loginPage("/login").permitAll()
@@ -54,13 +55,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(myAuthEntryPoint) // Chưa đăng nhập
                 .accessDeniedPage("/404")// Không có quyền truy cập
                 .and()
-                .logout().invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login").permitAll()
+                .logout()
+                .logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
                 .and()
                 .rememberMe()// Nhớ tài khoản
-                .key("secret");
+                .key("secret")
+                .tokenValiditySeconds(1296000);
     }
 
 
@@ -87,6 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/resources/static/**"); // #3
+                .antMatchers("/resources/static/**")
+        ; // #3
     }
 }

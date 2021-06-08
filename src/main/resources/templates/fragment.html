@@ -305,14 +305,14 @@
     </nav>
 </header>
 <ul th:fragment="sidebar" class="navigation">
-    <li>
+    <li th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
         <a th:href="@{/index}">
             <i class="text-primary menu-icon fa fa-fw fa-dashboard"></i>
             <span class="mm-text ">Dashboard</span>
         </a>
     </li>
 
-    <li class="menu-dropdown">
+    <li class="menu-dropdown" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
         <a href="#">
             <i class="text-danger menu-icon fa fa-fw fa-reorder"></i>
             <span class="mm-text">Invoice</span>
@@ -326,26 +326,26 @@
             </li>
         </ul>
     </li>
-<!--    <li class="menu-dropdown">-->
-<!--        <a href="#">-->
-<!--            <i class="text-danger menu-icon fa fa-fw fa-calendar"></i>-->
-<!--            <span class="mm-text">Events</span>-->
-<!--            <span class="fa fa-angle-down pull-right"></span>-->
-<!--        </a>-->
-<!--        <ul class="sub-menu">-->
-<!--            <li>-->
-<!--                <a th:href="@{/events_list}">-->
-<!--                    <i class="text-primary menu-icon fa fa-fw fa-list"></i> Events List-->
-<!--                </a>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--                <a th:href="@{/event_item}">-->
-<!--                    <i class="text-info menu-icon fa fa-fw fa-fast-forward"></i> Event Item-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </li>-->
-    <li class="menu-dropdown">
+    <!--    <li class="menu-dropdown">-->
+    <!--        <a href="#">-->
+    <!--            <i class="text-danger menu-icon fa fa-fw fa-calendar"></i>-->
+    <!--            <span class="mm-text">Events</span>-->
+    <!--            <span class="fa fa-angle-down pull-right"></span>-->
+    <!--        </a>-->
+    <!--        <ul class="sub-menu">-->
+    <!--            <li>-->
+    <!--                <a th:href="@{/events_list}">-->
+    <!--                    <i class="text-primary menu-icon fa fa-fw fa-list"></i> Events List-->
+    <!--                </a>-->
+    <!--            </li>-->
+    <!--            <li>-->
+    <!--                <a th:href="@{/event_item}">-->
+    <!--                    <i class="text-info menu-icon fa fa-fw fa-fast-forward"></i> Event Item-->
+    <!--                </a>-->
+    <!--            </li>-->
+    <!--        </ul>-->
+    <!--    </li>-->
+    <li class="menu-dropdown" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
         <a href="#">
             <i class="text-warning menu-icon fa fa-fw fa-graduation-cap"></i>
             <span class="mm-text">Course Schedule</span>
@@ -358,18 +358,13 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{/admin_rooms}">
-                    <i class="text-info fa fa-fw fa-star"></i> Rooms
-                </a>
-            </li>
-            <li>
                 <a th:href="@{/admin_courseschedule}">
                     <i class="text-primary fa fa-fw fa-th"></i> Course Schedule
                 </a>
             </li>
         </ul>
     </li>
-    <li class="menu-dropdown">
+    <li class="menu-dropdown" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
         <a href="#">
             <i class="text-default menu-icon fa fa-fw fa-paw fa-info-circle"></i>
             <span class="mm-text">Trainers</span>
@@ -388,7 +383,8 @@
             </li>
         </ul>
     </li>
-    <li class="menu-dropdown">
+    <li class="menu-dropdown" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')
+     or #authorization.expression('hasAuthority(''MODE'')')}">
         <a href="#">
             <i class="text-default menu-icon fa fa-fw fa-users"></i>
             <span class="mm-text">Users</span>
@@ -407,7 +403,7 @@
             </li>
         </ul>
     </li>
-    <li class="menu-dropdown">
+    <li class="menu-dropdown" th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
         <a href="#">
             <i class="text-default menu-icon fa fa-fw fa-users"></i>
             <span class="mm-text">Customers</span>
@@ -426,49 +422,43 @@
             </li>
         </ul>
     </li>
-    <li>
-        <a th:href="@{/admin_coupon}">
-            <i class="text-primary  menu-icon fa fa-scissors"></i>
-            <span class="mm-text">Coupons</span>
-        </a>
-    </li>
-    <li class="menu-dropdown">
-        <a href="#">
-            <i class="text-success menu-icon fa fa-fw fa-picture-o"></i>
-            <span class="mm-text">Gallery</span>
-            <span class="fa fa-angle-down pull-right"></span>
-        </a>
-        <ul class="sub-menu">
-            <li>
-                <a th:href="@{/add_gallery}">
-                    <i class="text-primary fa fa-fw fa-cloud-upload"></i> Add Gallery
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/gallery}">
-                    <i class="text-success fa fa-fw fa-file-image-o"></i> Gallery
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li>
+    <!--    <li>-->
+    <!--        <a th:href="@{/admin_coupon}">-->
+    <!--            <i class="text-primary  menu-icon fa fa-scissors"></i>-->
+    <!--            <span class="mm-text">Coupons</span>-->
+    <!--        </a>-->
+    <!--    </li>-->
+    <!--    <li class="menu-dropdown">-->
+    <!--        <a href="#">-->
+    <!--            <i class="text-success menu-icon fa fa-fw fa-picture-o"></i>-->
+    <!--            <span class="mm-text">Gallery</span>-->
+    <!--            <span class="fa fa-angle-down pull-right"></span>-->
+    <!--        </a>-->
+    <!--        <ul class="sub-menu">-->
+    <!--            <li>-->
+    <!--                <a th:href="@{/add_gallery}">-->
+    <!--                    <i class="text-primary fa fa-fw fa-cloud-upload"></i> Add Gallery-->
+    <!--                </a>-->
+    <!--            </li>-->
+    <!--            <li>-->
+    <!--                <a th:href="@{/gallery}">-->
+    <!--                    <i class="text-success fa fa-fw fa-file-image-o"></i> Gallery-->
+    <!--                </a>-->
+    <!--            </li>-->
+    <!--        </ul>-->
+    <!--    </li>-->
+    <li th:if="${#authorization.expression('hasAuthority(''TRAINER'')') or #authorization.expression('hasAuthority(''ADMIN'')')}">
         <a th:href="@{/admin_timings}">
             <i class="text-info menu-icon fa fa-fw fa-clock-o"></i>
-            <span class="mm-text">Class Calendar</span>
+            <span class="mm-text">Course Calendar</span>
         </a>
     </li>
-    <li>
-        <a th:href="@{/admin_login}">
-            <i class="text-danger menu-icon fa fa-sign-in"></i>
-            <span class="mm-text">Login</span>
-        </a>
-    </li>
-    <li>
-        <a href="404.html">
-            <i class="text-warning menu-icon fa fa-anchor"></i>
-            <span class="mm-text">404</span>
-        </a>
-    </li>
+    <!--    <li>-->
+    <!--        <a th:href="@{/admin_login}">-->
+    <!--            <i class="text-danger menu-icon fa fa-sign-in"></i>-->
+    <!--            <span class="mm-text">Login</span>-->
+    <!--        </a>-->
+    <!--    </li>-->
     <li class="menu-dropdown">
         <a href="#">
             <i class="text-success menu-icon fa fa-fw fa-question-circle"></i>

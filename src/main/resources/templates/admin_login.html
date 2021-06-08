@@ -30,6 +30,9 @@
             <h3 class="text-center">Admin Log In</h3>
             <p th:if="${param.failed}" style="color: #953b39" class="error">Invalid email or password</p>
             <p th:if="${param.logout}" style="color: #953b39" class="success">You have been logged out</p>
+            <div th:if="${message != null}">
+                <p class="text-warning">[[${message}]]</p>
+            </div>
             <form class="form" id="log_in" method="post" th:action="@{/login}">
                 <div class="form-group">
                     <label class="sr-only"></label>
@@ -41,7 +44,7 @@
                 </div>
                 <div class="checkbox text-left">
                     <label>
-                        <input type="checkbox"> Remember Password
+                        <input type="checkbox" name="remember-me"> Remember Password
                     </label>
                 </div>
                 <input type="submit" class="btn btn-block btn-warning" value="Log In">

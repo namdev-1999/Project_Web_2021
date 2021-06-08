@@ -46,8 +46,7 @@ public class UserController {
     static {
         listRole.add("ADMIN");
         listRole.add("USER");
-        listRole.add("MEMBER");
-        listRole.add("OTHER");
+        listRole.add("TRAINER");
     }
 
     @GetMapping(value = "/user_forgot")
@@ -80,7 +79,6 @@ public class UserController {
         } catch (UnsupportedEncodingException | MessagingException e) {
             model.addAttribute("error", "Error while sending email");
         }
-
         return "user_forgot";
     }
 
@@ -115,7 +113,6 @@ public class UserController {
     public String processResetPassword(HttpServletRequest request, Model model) {
         String token = request.getParameter("token");
         String password = request.getParameter("password");
-
         User user = userDetailService.getByResetPasswordToken(token);
         model.addAttribute("title", "Reset your password");
 
@@ -124,10 +121,8 @@ public class UserController {
             return "admin_login";
         } else {
             userDetailService.updatePassword(user, password);
-
             model.addAttribute("message", "You have successfully changed your password.");
         }
-
         return "admin_login";
     }
 
@@ -136,11 +131,9 @@ public class UserController {
     public String register(@ModelAttribute User user, HttpServletRequest request, Model model) {
         String linkCode = RandomString.make(100);
         String verifyCode = String.format("%06d", new Random().nextInt(1000000));
-
         try {
             String confirmLink = Utility.getSiteURL(request) + "/verify?token=" + linkCode;
             String subject = "Here's the link to confirm your email";
-
             String content = "<p>Hello,</p>"
                     + "<p>You have registered an account.</p>"
                     + "<p>Click the link below and enter the code to confirm this email address:</p>"

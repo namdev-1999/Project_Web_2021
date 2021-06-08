@@ -25,6 +25,10 @@ $(document).ready(function () {
                     },
                     emailAddress: {
                         message: 'The valid email address is required'
+                    },
+                    remote: {
+                        url: '/api/checkEmail/',
+                        message: 'The email has registered. Please enter other email!',
                     }
                 }
             },

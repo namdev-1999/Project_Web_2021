@@ -16,13 +16,13 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column
+    @Column(nullable = false)
     private double total;
 
-    @Column
+    @Column(length = 60, nullable = false)
     private String title;
 
-    @Column
+    @Column(length = 255, nullable = false)
     private String contain;
 
     @Column
@@ -32,4 +32,16 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "id_customer")
     private Customer customer;
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", total=" + total +
+                ", title='" + title + '\'' +
+                ", contain='" + contain + '\'' +
+                ", date=" + date +
+                ", customer=" + customer +
+                '}';
+    }
 }

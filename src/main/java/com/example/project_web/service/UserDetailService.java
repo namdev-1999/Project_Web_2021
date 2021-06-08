@@ -54,7 +54,6 @@ public class UserDetailService implements UserDetailsService {
     // Chỉnh sửa thông tin user
     public void update(User user) {
         User u = userRepository.findUserById(user.getId());
-        u.setAvatar(user.getAvatar());
         u.setEmail(user.getEmail());
         u.setName(user.getName());
         u.setDob(user.getDob());
@@ -67,8 +66,6 @@ public class UserDetailService implements UserDetailsService {
     //Thêm user mới
     public User addUser(User user) {
         User u = new User();
-        //u.setId(user.getId());
-        //System.out.println(u + " " + user);
         u.setAvatar(user.getAvatar());
         u.setEmail(user.getEmail());
         u.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -100,7 +97,6 @@ public class UserDetailService implements UserDetailsService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
-
         user.setResetPasswordToken(null);
         userRepository.save(user);
     }
@@ -108,7 +104,16 @@ public class UserDetailService implements UserDetailsService {
     // Đăng ký
     public boolean register(User user) {
         if (checkUserExist(user.getEmail())) return false;
-        addUser(user);
+        User u = new User();
+        u.setAvatar(user.getAvatar());
+        u.setEmail(user.getEmail());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        u.setName(user.getName());
+        u.setDob(user.getDob());
+        u.setPhone(user.getPhone());
+        u.setRole("USER");
+        u.setStatus(user.getStatus());
+        userRepository.save(u);
         return true;
     }
 

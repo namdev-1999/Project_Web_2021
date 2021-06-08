@@ -19,6 +19,11 @@ public class CoursesService {
         return courseRepository.findAll();
     }
 
+    //Lấy tên các khóa học
+    public List<String> findAllByName() {
+        return courseRepository.findAllByName();
+    }
+
     //Thêm course mới
     public Course addCourse(Course course) {
         return courseRepository.save(course);
@@ -41,6 +46,7 @@ public class CoursesService {
 //        c.setTrainer(new Trainer());
         courseRepository.save(course);
     }
+
     // Xóa course theo id
     public void deleteById(int id) {
         courseRepository.deleteById(id);

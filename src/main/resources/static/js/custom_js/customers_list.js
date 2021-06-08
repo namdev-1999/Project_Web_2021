@@ -190,14 +190,15 @@ $(document).ready(function () {
     function editRow(fTable, frow) {
         var fData = fTable.fnGetData(frow);
         var ftable = $('>td', frow);
-        ftable[0].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['name'] + '">';
-        ftable[1].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['email'] + '">';
-        ftable[2].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['phone'] + '">';
-        ftable[3].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['dob'] + '">';
-        ftable[4].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['register_date'] + '">';
-        ftable[5].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['level'] + '">';
-        ftable[6].innerHTML = '<a class="edit btn btn-success" href="">Save</a>';
-        ftable[7].innerHTML = '<a class="cancel btn btn-danger" href="">Cancel</a>';
+        ftable[0].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['id'] + '">';
+        ftable[1].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['name'] + '">';
+        ftable[2].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['email'] + '">';
+        ftable[3].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['phone'] + '">';
+        ftable[4].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['dob'] + '">';
+        ftable[5].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['register_date'] + '">';
+        ftable[6].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['level'] + '">';
+        ftable[7].innerHTML = '<a class="edit btn btn-success" href="">Save</a>';
+        ftable[8].innerHTML = '<a class="cancel btn btn-danger" href="">Cancel</a>';
     }
 
     function saveRow(fTable, frow) {
@@ -208,9 +209,10 @@ $(document).ready(function () {
         fTable.fnUpdate(jqInputs[3].value, frow, 3, false);
         fTable.fnUpdate(jqInputs[4].value, frow, 4, false);
         fTable.fnUpdate(jqInputs[5].value, frow, 5, false);
+        fTable.fnUpdate(jqInputs[6].value, frow, 6, false);
 
-        fTable.fnUpdate('<a class="edit btn btn-primary" href=""><i class="fa fa-fw fa-edit"></i> Edit</a>', frow, 6, false);
-        fTable.fnUpdate('<a class="delete btn btn-danger" href=""><i class="fa fa-trash-o"></i> Delete</a>', frow, 7, false);
+        fTable.fnUpdate('<a class="edit btn btn-primary" href=""><i class="fa fa-fw fa-edit"></i> Edit</a>', frow, 7, false);
+        fTable.fnUpdate('<a class="delete btn btn-danger" href=""><i class="fa fa-trash-o"></i> Delete</a>', frow, 8, false);
         fTable.fnDraw();
     }
 
@@ -222,7 +224,8 @@ $(document).ready(function () {
         fTable.fnUpdate(jqInputs[3].value, frow, 3, false);
         fTable.fnUpdate(jqInputs[4].value, frow, 4, false);
         fTable.fnUpdate(jqInputs[5].value, frow, 5, false);
-        fTable.fnUpdate('<a class="edit btn btn-primary" href=""><i class="fa fa-fw fa-edit"></i> Edit</a>', frow, 6, false);
+        fTable.fnUpdate(jqInputs[6].value, frow, 6, false);
+        fTable.fnUpdate('<a class="edit btn btn-primary" href=""><i class="fa fa-fw fa-edit"></i> Edit</a>', frow, 7, false);
         fTable.fnDraw();
     }
 
@@ -243,6 +246,7 @@ $(document).ready(function () {
         },
         rowId: 'id',
         columns: [
+            {data: 'id'},
             {data: 'name'},
             {data: 'email'},
             {data: 'phone'},

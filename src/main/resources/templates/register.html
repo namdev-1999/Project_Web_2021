@@ -37,7 +37,7 @@
             <form class="form" id="register" method="post" th:action="@{/register}">
                 <div class="form-group">
                     <label class="sr-only"></label>
-                    <input type="email" class="form-control" name="email" placeholder="Email" required>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Email" required>
                 </div>
                 <div class="form-group">
                     <label class="sr-only"></label>
@@ -51,14 +51,16 @@
                     <label class="sr-only"></label>
                     <input type="password" class="form-control" name="password" placeholder="Password" required>
                 </div>
-                <div class="checkbox text-left">
-                    <label>
-                        <input type="checkbox"> I agree with <a class="text-warning forgot_color">Terms and Conditions</a>
-                    </label>
+                <div class="form-group checkbox text-left text-primary">
+                    <label></label>
+                    <input type="checkbox" name="term" class="form-control"> I agree with <a class="text-warning forgot_color">Terms and
+                        Conditions</a>
+
                 </div>
                 <input type="submit" class="btn btn-block btn-warning" value="Sign Up">
             </form>
-            <p class="text-right text-primary">Already have an account?<a th:href="@{/admin_login}" class="text-warning forgot_color">Log In</a>
+            <p class="text-right text-primary">Already have an account?<a th:href="@{/admin_login}"
+                                                                          class="text-warning forgot_color">Log In</a>
             </p>
         </div>
     </div>

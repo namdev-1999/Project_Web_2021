@@ -33,9 +33,6 @@
                 <div th:if="${message != null}">
                     <p class="text-warning">[[${message}]]</p>
                 </div>
-                <div>
-                    <p style="color:#FFFFFF">We will be sending a reset password link to your email.</p>
-                </div>
                 <form class="form" th:action="@{/user_forgot}" id="forgot_password" method="post">
                     <div class="form-group">
                         <label class="sr-only"></label>

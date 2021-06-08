@@ -59,7 +59,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <!--section starts-->
-            <h2>Courses</h2>
+            <h2>Invoice</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="index-2.html">
@@ -75,7 +75,7 @@
             </ol>
         </section>
         <!--section ends-->
-        <div class="container-fluid">
+        <div class="container-fluid" id="page">
             <!--main content-->
             <div class="paddingtopbottom_5px">
                 <a th:href="@{/add_receipt}"><button class="btn btn-primary">Add Invoice <i class="text-light fa fa-plus-circle"></i></button></a>
@@ -97,10 +97,12 @@
                             <table class="table table-bordered" id="fitness-table">
                                 <thead>
                                 <tr>
-                                    <th>Invoice Title</th>
-                                    <th>Invoice Contain</th>
-                                    <th>Invoice Total</th>
+                                    <th>ID Invoice</th>
+                                    <th>Title</th>
+                                    <th>Contain</th>
+                                    <th>Total</th>
                                     <th>Date</th>
+                                    <th>ID Customer</th>
                                     <th>Edit/Save</th>
                                     <th>Delete/Cancel</th>
                                 </tr>

@@ -1,9 +1,8 @@
 "use strict";
-$(document).ready(function() {
+$(document).ready(function () {
     $("input[type='checkbox']").iCheck({
         checkboxClass: 'icheckbox_minimal-yellow',
         radioClass: 'iradio_minimal-yellow'
-
     });
     $("#register").bootstrapValidator({
         excluded: [':disabled'],
@@ -16,6 +15,10 @@ $(document).ready(function() {
                     },
                     emailAddress: {
                         message: 'The email address is not a valid'
+                    },
+                    remote: {
+                        url: '/api/checkEmail/',
+                        message: 'The email has registered. Please login',
                     }
                 }
             },
@@ -50,7 +53,17 @@ $(document).ready(function() {
                         min: 8
                     }
                 }
+            },
+            term: {
+                validators: {
+                    choice: {
+                        min: 1,
+                        max: 1,
+                        message: 'The Terms and Conditions is required'
+                    }
+                }
             }
         }
     });
-});
+
+})

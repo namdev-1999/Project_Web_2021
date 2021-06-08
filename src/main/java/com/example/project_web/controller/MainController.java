@@ -1,24 +1,32 @@
 package com.example.project_web.controller;
 
-import com.example.project_web.entity.User;
+import com.example.project_web.entity.Course;
+import com.example.project_web.entity.CourseSchedule;
+import com.example.project_web.entity.Trainer;
+import com.example.project_web.service.CourseScheduleService;
+import com.example.project_web.service.CoursesService;
 import com.example.project_web.service.InvoiceService;
-import org.dom4j.rule.Mode;
+import com.example.project_web.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class MainController {
     @Autowired
     private InvoiceService invoiceService;
+
+    @Autowired
+    private CoursesService coursesService;
+
+    @Autowired
+    private TrainerService trainerService;
+
+    @Autowired
+    private CourseScheduleService courseScheduleService;
 
     //================== FOR USER ==================//
     @RequestMapping(value = "/")
@@ -94,8 +102,13 @@ public class MainController {
         return "add_trainer";
     }
 
-    @RequestMapping(value = "/admin_courseschedule")
-    public String admin_courseschedule() {
+    @GetMapping(value = "/admin_courseschedule")
+    public String admin_courseschedule(Model model) {
+        List<String> courseList = coursesService.findAllByName();
+        List<String> trainerList = trainerService.findAllByName();
+
+        model.addAttribute("courseList", courseList);
+        model.addAttribute("trainerList", trainerList);
         return "admin_courseschedule";
     }
 

@@ -44,6 +44,17 @@ $(document).ready(function () {
                     }
                 }
             },
+            id_customer: {
+                validators: {
+                    notEmpty: {
+                        message: 'ID Customer is required'
+                    },
+                    remote: {
+                        url: '/api/id_customer/',
+                        message: 'The id invalid. Please enter other id',
+                    }
+                }
+            },
         }
     })
 });

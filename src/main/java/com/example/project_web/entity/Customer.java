@@ -21,16 +21,16 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column
+    @Column(length = 60, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String phone;
 
-    @Column
+    @Column(length = 60, nullable = false)
     private String email;
 
-     @Column
+    @Column(length = 10, nullable = false)
     private String level;
 
     @Column
@@ -41,14 +41,30 @@ public class Customer {
     @Temporal(value = TemporalType.DATE)
     private Date register_date;
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Invoice> invoices = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Attendance> attendances;
+    private Set<Attendance> attendances = new HashSet<>();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Set<Customer_Course> customer_courses;
+    private Set<Customer_Course> customer_courses = new HashSet<>();
 
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", level='" + level + '\'' +
+                ", dob=" + dob +
+                ", register_date=" + register_date +
+                ", invoices=" + invoices +
+                ", attendances=" + attendances +
+                ", customer_courses=" + customer_courses +
+                '}';
+    }
 }

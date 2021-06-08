@@ -67,7 +67,18 @@ $(document).ready(function () {
                         message: 'End date is correctly 10 characters'
                     }
                 }
-            }
+            },
+            id_trainer: {
+                validators: {
+                    notEmpty: {
+                        message: 'ID Trainer is required'
+                    },
+                    remote: {
+                        url: '/api/id_trainer/',
+                        message: 'The id invalid. Please enter other id',
+                    }
+                }
+            },
         }
     })
 });

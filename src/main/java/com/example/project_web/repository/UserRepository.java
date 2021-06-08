@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
     User findUserByEmail(String email);
 
     User findUserById(int id);
@@ -19,6 +20,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByResetPasswordToken(String token);
 
     @Query(value = "SELECT * FROM User WHERE email = ?1", nativeQuery = true)
-    public User findByEmail(String email);
+    User findByEmail(String email);
 }
 

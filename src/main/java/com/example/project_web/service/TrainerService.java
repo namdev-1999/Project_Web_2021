@@ -1,9 +1,7 @@
 package com.example.project_web.service;
 
-import com.example.project_web.entity.Invoice;
 import com.example.project_web.entity.Trainer;
-import com.example.project_web.repository.InvoiceRepository;
-import com.example.project_web.repository.Trainerrepository;
+import com.example.project_web.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +11,16 @@ import java.util.List;
 public class TrainerService {
 
     @Autowired
-    private Trainerrepository trainerrepository;
+    private TrainerRepository trainerrepository;
 
     // Lấy toàn bộ danh sách trainer
     public List<Trainer> findAll() {
         return trainerrepository.findAll();
+    }
+
+    // Lấy tên các trainer
+    public List<String> findAllByName() {
+        return trainerrepository.findAllByName();
     }
 
     // Tìm trainer theo id

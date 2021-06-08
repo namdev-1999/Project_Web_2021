@@ -1,25 +1,42 @@
 "use strict";
-$(document).ready(function() {
+$(document).ready(function () {
     //summernote JS
     $('.summernote').summernote({
         height: 200,
         width: 500
     });
 
-    // class calendar
-    $(".inline1, .inline2, .inline3, .inline4, .inline5, .inline6, .inline7, .inline8, .inline9, .inline10, .inline11, .inline12, .inline13, .inline14, .inline15, .inline16 ").on('click', function(e) {
-        e.preventDefault();
-        swal({
-            title: "Class Calendar",
-            text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam quis m",
-            allowOutsideClick: false,
-            confirmButtonColor: "#fc7070",
-            confirmButtonText: "Cancel"
+    $.ajax({
+        url: '/api/course_schedule',
+        contentType: 'application/json',
+        dataType: 'json',
+        type: 'GET',
+        success: function (data) {
+            for (let i = 0; i < data.length; i++) {
+                var curData = data[i];
+                let description = curData["description"] == null ? "No description" : curData["description"];
+                let trSelector = "#time" + parseInt(curData["time_from"].split(":")[0]);
+                let tdSelector = "." + curData["day"].substring(0, 3);
+                $(trSelector + " " + tdSelector).html(
+                    '<a href="#" title=' + description + '>' + curData["time_from"] + ' - ' + curData["time_to"] + '<br><b>' + curData["course"] + '</b></a>'
+                ).addClass("inline").on('click', function (e) {
+                    e.preventDefault();
+                    swal({
+                        title: "Course Calendar",
+                        text: description,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#fc7070",
+                        confirmButtonText: "Cancel"
+                    })
+                })
+                console.log(data[i])
+            }
+        },
+    })
 
-        })
-    });
+
     //package reset functionality
-    $('input[type=reset]').on('click', function() {
+    $('input[type=reset]').on('click', function () {
         $(".note-editable").empty();
         $('#timings_form').bootstrapValidator("resetForm");
     });
@@ -37,12 +54,12 @@ $(document).ready(function() {
         minDate: new Date()
     });
 
-    $('#datetimepicker4').on("dp.change", function(e) {
+    $('#datetimepicker4').on("dp.change", function (e) {
         $('#datetimepicker5').data("DateTimePicker").minDate(e.date);
         $('#timings_form').bootstrapValidator('revalidateField', 'time_from');
     });
 
-    $('#datetimepicker5').on("dp.change", function(e) {
+    $('#datetimepicker5').on("dp.change", function (e) {
         $('#datetimepicker4').data("DateTimePicker").maxDate(e.date);
         $('#timings_form').bootstrapValidator('revalidateField', 'time_to');
 
@@ -91,7 +108,7 @@ $(document).ready(function() {
             }
 
         }
-    }).on('success.form.bv', function(e) {
+    }).on('success.form.bv', function (e) {
         e.preventDefault();
         swal({
             title: "Success.",
@@ -99,13 +116,12 @@ $(document).ready(function() {
             type: "success",
             allowOutsideClick: false
 
-        }).then(function() {
+        }).then(function () {
 
             location.reload();
 
         });
     })
-
 
 
 });

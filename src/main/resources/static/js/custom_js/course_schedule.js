@@ -1,32 +1,14 @@
 "use strict";
-$(document).ready(function() {
-      $('[type="reset"]').click(function() {
-        setTimeout(function() {
+$(document).ready(function () {
+    $('[type="reset"]').click(function () {
+        setTimeout(function () {
             $("input").iCheck("update");
         }, 10);
-    }); 
+    });
     //summernote JS
     $('.summernote').summernote({
         height: 200,
         width: 500
-    });
-
-    //date picker js
-    $('#datetimepicker4').datetimepicker({
-
-        keepOpen: false,
-        useCurrent: false,
-        minDate: new Date().setHours(0, 0, 0, 0)
-    });
-    var date = new Date();
-    date.setDate(date.getDate() - 1);
-    $('#datetimepicker4').datetimepicker({
-        startDate: date
-    });
-    $('#datetimepicker5').datetimepicker({
-        keepOpen: false,
-        useCurrent: false,
-        minDate: new Date()
     });
 
     //icheck js
@@ -36,35 +18,11 @@ $(document).ready(function() {
         radioClass: 'iradio_minimal-green'
     });
     //table js
-    $('input[type=reset]').on('click', function() {
+    $('input[type=reset]').on('click', function () {
         $(".note-editable").empty();
         $('#courseschedule_form').bootstrapValidator("resetForm");
     });
-    $('#datetimepicker4').datetimepicker({
-        keepOpen: false,
-        useCurrent: false,
-        minDate: new Date()
-    });
-    var date = new Date();
-    date.setDate(date.getDate() - 1);
-    $('#datetimepicker4').datetimepicker({
-        startDate: date
-    });
-    $('#datetimepicker5').datetimepicker({
-        keepOpen: false,
-        useCurrent: false,
-        minDate: new Date()
-    });
-    $('#datetimepicker4').on("dp.change", function(e) {
-        $('#datetimepicker5').data("DateTimePicker").minDate(e.date);
-        $('#courseschedule_form').bootstrapValidator('revalidateField', 'time_from');
-    });
 
-    $('#datetimepicker5').on("dp.change", function(e) {
-        $('#datetimepicker4').data("DateTimePicker").maxDate(e.date);
-        $('#courseschedule_form').bootstrapValidator('revalidateField', 'time_to');
-
-    });
     $('#courseschedule_form').bootstrapValidator({
 
         fields: {
@@ -97,14 +55,14 @@ $(document).ready(function() {
                     }
                 }
             },
-            rooms: {
+            room: {
                 validators: {
                     notEmpty: {
                         message: 'The room is required'
                     }
                 }
             },
-            trainers: {
+            trainer: {
                 validators: {
                     notEmpty: {
                         message: 'The trainer is required'
@@ -112,18 +70,6 @@ $(document).ready(function() {
                 }
             }
         }
-    }).on('success.form.bv', function(e) {
-        e.preventDefault();
-        swal({
-            title: "Success.",
-            text: "Successfully Submitted",
-            type: "success",
-            allowOutsideClick: false
-
-        }).then(function() {
-            window.location.href = "admin_courseschedule.html";
-
-        });
     });
 
     function row(fTable, frow) {
@@ -140,11 +86,11 @@ $(document).ready(function() {
     function editRow(fTable, frow) {
         var fData = fTable.fnGetData(frow);
         var ftable = $('>td', frow);
-        ftable[0].innerHTML = '<input type="text" class="form-control input-small" value="' + fData[0] + '">';
-        ftable[1].innerHTML = '<input type="text" class="form-control input-small" value="' + fData[1] + '">';
-        ftable[2].innerHTML = '<input type="text" class="form-control input-small" value="' + fData[2] + '">';
-        ftable[3].innerHTML = '<input type="text" class="form-control input-small" value="' + fData[3] + '">';
-        ftable[4].innerHTML = '<input type="text" class="form-control input-small" value="' + fData[4] + '">';
+        ftable[0].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['course'] + '">';
+        ftable[1].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['trainer'] + '">';
+        ftable[2].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['room'] + '">';
+        ftable[3].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['time_from'] + '">';
+        ftable[4].innerHTML = '<input type="text" class="form-control input-small" value="' + fData['time_to'] + '">';
         ftable[5].innerHTML = '<a class="edit btn btn-success mar-bm" href="">Save</a>';
         ftable[6].innerHTML = '<a class="cancel btn btn-danger mar-bm" href="">Cancel</a>';
     }
@@ -180,14 +126,39 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Monday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
     });
 
 
     var FitnessEditing = null;
     var FitnesNew = false;
 
-    $('#table_new').click(function(e) {
+    $('#table_new').click(function (e) {
         e.preventDefault();
 
         if (FitnesNew && FitnessEditing) {
@@ -204,7 +175,7 @@ $(document).ready(function() {
         FitnessEditing = frow;
         FitnesNew = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -219,12 +190,27 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
-    table.on('click', '.cancel', function(e) {
+    table.on('click', '.cancel', function (e) {
         e.preventDefault();
 
         if (FitnesNew) {
@@ -234,19 +220,37 @@ $(document).ready(function() {
             row(fTable, FitnessEditing);
             FitnessEditing = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(e) {
+    table.on('click', '.edit', function (e) {
         e.preventDefault();
-
-        var frow = $(this).parents('tr')[0];
-
+        var frow = $(this).parent().parent('tr')[0];
         if (FitnessEditing !== null && FitnessEditing != frow) {
-
             row(fTable, FitnessEditing);
             editRow(fTable, frow);
             FitnessEditing = frow;
+
         } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                day: "Monday",
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
             saveRow(fTable, FitnessEditing);
             FitnessEditing = null;
             swal({
@@ -254,7 +258,6 @@ $(document).ready(function() {
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
             editRow(fTable, frow);
@@ -271,14 +274,39 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Tuesday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
     });
 
 
     var FitnessEditing1 = null;
     var FitnesNew1 = false;
 
-    $('#table_new1').on('click', function(f) {
+    $('#table_new1').on('click', function (f) {
         f.preventDefault();
 
         if (FitnesNew1 && FitnessEditing1) {
@@ -295,7 +323,7 @@ $(document).ready(function() {
         FitnessEditing1 = frow;
         FitnesNew1 = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -310,14 +338,29 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable1.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
 
 
-    table.on('click', '.cancel', function(f) {
+    table.on('click', '.cancel', function (f) {
         f.preventDefault();
 
         if (FitnesNew1) {
@@ -327,33 +370,49 @@ $(document).ready(function() {
             row(fTable1, FitnessEditing1);
             FitnessEditing1 = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(f) {
-        f.preventDefault();
-
-        var frow = $(this).parents('tr')[0];
-
-        if (FitnessEditing1 !== null && FitnessEditing1 != frow) {
-
-            row(fTable1, FitnessEditing1);
-            editRow(fTable1, frow);
+    table.on('click', '.edit', function (e) {
+        e.preventDefault();
+        var frow = $(this).parent().parent('tr')[0];
+        if (FitnessEditing !== null && FitnessEditing != frow) {
+            row(fTable, FitnessEditing);
+            editRow(fTable, frow);
             FitnessEditing = frow;
-        } else if (FitnessEditing1 == frow && this.innerHTML == "Save") {
-            saveRow(fTable1, FitnessEditing1);
-            FitnessEditing1 = null;
+        } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,day: "Tuesday",
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
+            saveRow(fTable, FitnessEditing);
+            FitnessEditing = null;
             swal({
                 title: "Updated.",
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
-            editRow(fTable1, frow);
-            FitnessEditing1 = frow;
+            editRow(fTable, frow);
+            FitnessEditing = frow;
         }
     });
+
     //table 3
     var table = $('.table3');
 
@@ -363,14 +422,41 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Wednesday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
+
+
     });
 
 
     var FitnessEditing2 = null;
     var FitnesNew2 = false;
 
-    $('#table_new2').click(function(h) {
+    $('#table_new2').click(function (h) {
         h.preventDefault();
 
         if (FitnesNew2 && FitnessEditing2) {
@@ -387,7 +473,7 @@ $(document).ready(function() {
         FitnessEditing2 = frow;
         FitnesNew2 = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -402,14 +488,29 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable2.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
 
 
-    table.on('click', '.cancel', function(h) {
+    table.on('click', '.cancel', function (h) {
         e.preventDefault();
 
         if (FitnesNew2) {
@@ -419,38 +520,53 @@ $(document).ready(function() {
             row(fTable2, FitnessEditing2);
             FitnessEditing2 = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(h) {
-        h.preventDefault();
+    table.on('click', '.edit', function (e) {
+        e.preventDefault();
+        var frow = $(this).parent().parent('tr')[0];
+        if (FitnessEditing !== null && FitnessEditing != frow) {
+            row(fTable, FitnessEditing);
+            editRow(fTable, frow);
+            FitnessEditing = frow;
+            // console.log(row)
 
-        var frow = $(this).parents('tr')[0];
-
-        if (FitnessEditing2 !== null && FitnessEditing2 != frow) {
-
-            row(fTable2, FitnessEditing2);
-            editRow(fTable2, frow);
-            FitnessEditing2 = frow;
-        } else if (FitnessEditing2 == frow && this.innerHTML == "Save") {
-            saveRow(fTable2, FitnessEditing2);
-            FitnessEditing2 = null;
+        } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,day: "Wednesday",
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
+            saveRow(fTable, FitnessEditing);
+            FitnessEditing = null;
             swal({
                 title: "Updated.",
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
-            editRow(fTable2, frow);
-            FitnessEditing2 = frow;
+            editRow(fTable, frow);
+            FitnessEditing = frow;
         }
     });
 
 
     //table 4
-
-
     var table = $('.table4');
 
     var fTable3 = table.dataTable({
@@ -459,14 +575,41 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Thursday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
+
+
     });
 
 
     var FitnessEditing3 = null;
     var FitnesNew3 = false;
 
-    $('#table_new3').on('click', function(h) {
+    $('#table_new3').on('click', function (h) {
         h.preventDefault();
 
         if (FitnesNew3 && FitnessEditing3) {
@@ -483,7 +626,7 @@ $(document).ready(function() {
         FitnessEditing3 = frow;
         FitnesNew3 = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -498,14 +641,29 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable3.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
 
 
-    table.on('click', '.cancel', function(h) {
+    table.on('click', '.cancel', function (h) {
         e.preventDefault();
 
         if (FitnesNew3) {
@@ -515,31 +673,48 @@ $(document).ready(function() {
             row(fTable3, FitnessEditing3);
             FitnessEditing3 = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(h) {
-        h.preventDefault();
+    table.on('click', '.edit', function (e) {
+        e.preventDefault();
+        var frow = $(this).parent().parent('tr')[0];
+        if (FitnessEditing !== null && FitnessEditing != frow) {
+            row(fTable, FitnessEditing);
+            editRow(fTable, frow);
+            FitnessEditing = frow;
+            // console.log(row)
 
-        var frow = $(this).parents('tr')[0];
-
-        if (FitnessEditing3 !== null && FitnessEditing3 != frow) {
-
-            row(fTable3, FitnessEditing3);
-            editRow(fTable3, frow);
-            FitnessEditing3 = frow;
-        } else if (FitnessEditing3 == frow && this.innerHTML == "Save") {
-            saveRow(fTable3, FitnessEditing3);
-            FitnessEditing3 = null;
+        } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,day: "Thursday",
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
+            saveRow(fTable, FitnessEditing);
+            FitnessEditing = null;
             swal({
                 title: "Updated.",
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
-            editRow(fTable3, frow);
-            FitnessEditing3 = frow;
+            editRow(fTable, frow);
+            FitnessEditing = frow;
         }
     });
 
@@ -553,14 +728,41 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Friday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
+
+
     });
 
 
     var FitnessEditing4 = null;
     var FitnesNew4 = false;
 
-    $('#table_new4').click(function(i) {
+    $('#table_new4').click(function (i) {
         i.preventDefault();
 
         if (FitnesNew4 && FitnessEditing4) {
@@ -577,7 +779,7 @@ $(document).ready(function() {
         FitnessEditing4 = frow;
         FitnesNew4 = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -592,14 +794,29 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable4.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
 
 
-    table.on('click', '.cancel', function(i) {
+    table.on('click', '.cancel', function (i) {
         i.preventDefault();
 
         if (FitnesNew4) {
@@ -609,31 +826,48 @@ $(document).ready(function() {
             row(fTable4, FitnessEditing4);
             FitnessEditing4 = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(i) {
-        i.preventDefault();
+    table.on('click', '.edit', function (e) {
+        e.preventDefault();
+        var frow = $(this).parent().parent('tr')[0];
+        if (FitnessEditing !== null && FitnessEditing != frow) {
+            row(fTable, FitnessEditing);
+            editRow(fTable, frow);
+            FitnessEditing = frow;
+            // console.log(row)
 
-        var frow = $(this).parents('tr')[0];
-
-        if (FitnessEditing4 !== null && FitnessEditing4 != frow) {
-
-            row(fTable4, FitnessEditing4);
-            editRow(fTable4, frow);
-            FitnessEditing4 = frow;
-        } else if (FitnessEditing4 == frow && this.innerHTML == "Save") {
-            saveRow(fTable4, FitnessEditing4);
-            FitnessEditing4 = null;
+        } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,day: "Friday",
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
+            saveRow(fTable, FitnessEditing);
+            FitnessEditing = null;
             swal({
                 title: "Updated.",
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
-            editRow(fTable4, frow);
-            FitnessEditing4 = frow;
+            editRow(fTable, frow);
+            FitnessEditing = frow;
         }
     });
 
@@ -647,14 +881,41 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Saturday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
+
+
     });
 
 
     var FitnessEditing5 = null;
     var FitnesNew5 = false;
 
-    $('#table_new5').on('click', function(j) {
+    $('#table_new5').on('click', function (j) {
         j.preventDefault();
 
         if (FitnesNew5 && FitnessEditing5) {
@@ -671,7 +932,7 @@ $(document).ready(function() {
         FitnessEditing5 = frow;
         FitnesNew5 = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -686,14 +947,29 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable5.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
 
 
-    table.on('click', '.cancel', function(j) {
+    table.on('click', '.cancel', function (j) {
         j.preventDefault();
 
         if (FitnesNew5) {
@@ -703,31 +979,48 @@ $(document).ready(function() {
             row(fTable5, FitnessEditing5);
             FitnessEditing5 = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(j) {
-        j.preventDefault();
+    table.on('click', '.edit', function (e) {
+        e.preventDefault();
+        var frow = $(this).parent().parent('tr')[0];
+        if (FitnessEditing !== null && FitnessEditing != frow) {
+            row(fTable, FitnessEditing);
+            editRow(fTable, frow);
+            FitnessEditing = frow;
+            // console.log(row)
 
-        var frow = $(this).parents('tr')[0];
-
-        if (FitnessEditing5 !== null && FitnessEditing5 != frow) {
-
-            row(fTable5, FitnessEditing5);
-            editRow(fTable5, frow);
-            FitnessEditing5 = frow;
-        } else if (FitnessEditing5 == frow && this.innerHTML == "Save") {
-            saveRow(fTable5, FitnessEditing5);
-            FitnessEditing5 = null;
+        } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,day: "Saturday",
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
+            saveRow(fTable, FitnessEditing);
+            FitnessEditing = null;
             swal({
                 title: "Updated.",
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
-            editRow(fTable5, frow);
-            FitnessEditing5 = frow;
+            editRow(fTable, frow);
+            FitnessEditing = frow;
         }
     });
 
@@ -740,14 +1033,41 @@ $(document).ready(function() {
             [5, 15, 20, "All"]
         ],
         // set the initial value
-        "pageLength": 5
+        "pageLength": 5,
+        ajax: {
+            url: '/api/course_schedule/th?th=Sunday',
+            contentType: 'application/json',
+            dataType: 'json',
+            dataSrc: ''
+        },
+        rowId: 'id',
+        columns: [
+            {data: 'course'},
+            {data: 'trainer'},
+            {data: 'room'},
+            {data: 'time_from'},
+            {data: 'time_to'},
+            {
+                "data": null,
+                "defaultContent": "<a class=\"edit btn btn-primary\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-fw fa-edit\"></i> Edit\n" + "</a>"
+            },
+            {
+                "data": null,
+                "defaultContent": "<a class=\"delete btn btn-danger\" href=\"javascript:;\">\n" +
+                    "<i class=\"fa fa-trash-o\"></i> Delete\n" + "</a>"
+            }
+        ],
+        select: true
+
+
     });
 
 
     var FitnessEditing6 = null;
     var FitnesNew6 = false;
 
-    $('#table_new6').on('click', function(i) {
+    $('#table_new6').on('click', function (i) {
         i.preventDefault();
 
         if (FitnesNew6 && FitnessEditing6) {
@@ -764,7 +1084,7 @@ $(document).ready(function() {
         FitnessEditing6 = frow;
         FitnesNew6 = true;
     });
-    table.on('click', '.delete', function(e) {
+    table.on('click', '.delete', function (e) {
         e.preventDefault();
         var frow = $(this).parent().parent('tr')[0];
         swal({
@@ -779,14 +1099,29 @@ $(document).ready(function() {
             closeOnConfirm: false,
             closeOnCancel: false
 
-        }).then(function() {
-            fTable6.fnDeleteRow(frow);
+        }).then(function () {
+            $.ajax({
+                url: '/api/course_schedule/delete/' + frow.id,
+                contentType: 'application/json',
+                dataType: 'json text',
+                type: 'DELETE',
+                success: function (data) {
+                    $('#alert_message').html('<div class="alert alert-success">' + data + '</div>');
+                    $('#user_data').DataTable().destroy();
+                    fTable.fnDeleteRow(frow);
+                    fetch_data();
+                    location.reload();
+                },
+                error: function (error) {
+                    location.reload();
+                }
+            });
         });
 
     });
 
 
-    table.on('click', '.cancel', function(i) {
+    table.on('click', '.cancel', function (i) {
         i.preventDefault();
 
         if (FitnesNew6) {
@@ -796,64 +1131,50 @@ $(document).ready(function() {
             row(fTable6, FitnessEditing6);
             FitnessEditing6 = null;
         }
+        location.reload();
     });
 
-    table.on('click', '.edit', function(i) {
-        i.preventDefault();
+    table.on('click', '.edit', function (e) {
+        e.preventDefault();
+        var frow = $(this).parent().parent('tr')[0];
+        if (FitnessEditing !== null && FitnessEditing != frow) {
+            row(fTable, FitnessEditing);
+            editRow(fTable, frow);
+            FitnessEditing = frow;
+            // console.log(row)
 
-        var frow = $(this).parents('tr')[0];
-
-        if (FitnessEditing6 !== null && FitnessEditing6 != frow) {
-
-            row(fTable6, FitnessEditing6);
-            editRow(fTable6, frow);
-            FitnessEditing6 = frow;
-        } else if (FitnessEditing6 == frow && this.innerHTML == "Save") {
-            saveRow(fTable6, FitnessEditing6);
-            FitnessEditing6 = null;
+        } else if (FitnessEditing == frow && this.innerHTML == "Save") {
+            var jqInputs = $('input', FitnessEditing);
+            var id = FitnessEditing.id;
+            var obj = {
+                id: id,day: "Sunday",
+                course: jqInputs[0].value,
+                trainer: jqInputs[1].value,
+                room: jqInputs[2].value,
+                time_from: jqInputs[3].value,
+                time_to: jqInputs[4].value
+            };
+            var jsonData = JSON.stringify(obj);
+            $.ajax({
+                type: "PUT",
+                url: "/api/course_schedule/edit/" + id,
+                contentType: "application/json",
+                dataType: "json",
+                data: jsonData.toString()
+            });
+            saveRow(fTable, FitnessEditing);
+            FitnessEditing = null;
             swal({
                 title: "Updated.",
                 text: "Successfully Saved",
                 type: "success",
                 allowOutsideClick: false
-
             })
         } else {
-            editRow(fTable6, frow);
-            FitnessEditing6 = frow;
+            editRow(fTable, frow);
+            FitnessEditing = frow;
         }
     });
 
-    //=Notofications============
-    $(".notification-alert").on('click', function(e) {
-        e.preventDefault();
-
-        swal({
-            title: 'Notification Alert',
-            input: 'email',
-            inputPlaceholder:"Enter your Email",
-            showCancelButton: true,
-            confirmButtonText: 'Get Updates',
-            showLoaderOnConfirm: true,
-            preConfirm: function(email) {
-                return new Promise(function(resolve, reject) {
-                    setTimeout(function() {
-                        if (email === 'taken@example.com') {
-                            reject('This email is already taken.');
-                        } else {
-                            resolve();
-                        }
-                    }, 2000);
-                });
-            },
-            allowOutsideClick: false
-        }).then(function(email) {
-            swal({
-                type: 'success',
-                title: 'Ajax request finished!',
-                html: 'Submitted email: ' + email
-            });
-        })
-    });
 
 });

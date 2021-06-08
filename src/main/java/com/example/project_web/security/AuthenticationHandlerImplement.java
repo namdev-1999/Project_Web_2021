@@ -32,10 +32,14 @@ public class AuthenticationHandlerImplement implements AuthenticationSuccessHand
         for (GrantedAuthority grantedAuthority : authorities)
             roles.add(grantedAuthority.getAuthority());
 
-        if (roles.contains("ADMIN")) {
+        if (roles.contains("ADMIN"))  {
             return "/index";
-        } else if (roles.contains("USER")) {
-            return "/";
+        }
+        if (roles.contains("TRAINER")){
+            return "/admin_timings";
+        }
+        if (roles.contains("MODE")){
+            return "/admin_userlist";
         }
         return "/";
     }

@@ -3,12 +3,11 @@ package com.example.project_web.controller;
 import com.example.project_web.entity.*;
 import com.example.project_web.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +35,9 @@ public class RestFullAPI {
     @Autowired
     private TrainerService trainerService;
 
+    @Autowired
+    private CourseScheduleService courseScheduleService;
+
     //======================================================== FOR USER ========================================================//
     // Lấy toàn bộ danh sách user
     @GetMapping(value = "/users/", produces = "application/json")
@@ -45,6 +47,13 @@ public class RestFullAPI {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
+
+    // Kiểm tra email đã tồn tại hay chưa ?
+    @GetMapping(value = "/checkEmail", produces = "application/json")
+    public String checkEmail(@RequestParam("email") String email) {
+        User user = userDetailService.findUserByEmail(email);
+        return String.format("{ \"valid\": %b }", user == null); //user null -> chưa có -> email hợp lệ -> không lỗi
     }
 
     // Lấy user theo id
@@ -86,7 +95,6 @@ public class RestFullAPI {
         if (userDetailService.findUserById(id) == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
-        System.out.println("Not NULL");
         userDetailService.deleteById(id);
         return ResponseEntity.ok("Deleted successfully!");
     }
@@ -138,7 +146,6 @@ public class RestFullAPI {
         if (coursesService.findCourseById(id) == null) {
             return ResponseEntity.badRequest().body("Course not found");
         }
-        System.out.println("Not NULL");
         coursesService.deleteById(id);
         return ResponseEntity.ok("Deleted successfully!");
     }
@@ -152,6 +159,12 @@ public class RestFullAPI {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(customerList, HttpStatus.OK);
+    }
+
+    // Lấy customer theo id
+    @GetMapping(value = "customers/{id}", produces = "application/json")
+    public Customer getCustomer(@PathVariable("id") int id) {
+        return customerService.findCustomerById(id);
     }
 
     // Chỉnh sửa thông tin customer
@@ -185,6 +198,16 @@ public class RestFullAPI {
             return "Cannot redirect";
         }
         return "OK";
+    }
+
+    // lấy số lượng customer
+    @GetMapping(value = "/count_customer_{year}", produces = "application/json")
+    public ResponseEntity<?> getCountCustomer(@PathVariable("year") int year) {
+        ArrayList<Integer> result = new ArrayList<>();
+        for (int i = 0; i < 12; i++) {
+            result.add(customerService.getCustomerByYearAndMonth(year, i + 1));
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     //======================================================== FOR TRAINER ========================================================//
@@ -231,12 +254,32 @@ public class RestFullAPI {
         return "OK";
     }
 
+    // Lấy trainer theo id
+    @GetMapping(value = "trainers/{id}", produces = "application/json")
+    public Trainer trainer(@PathVariable("id") int id) {
+        return trainerService.findTrainerById(id);
+    }
+
+    // Kiểm tra id có tồn tại hay không ?
+    @GetMapping(value = "/id_trainer", produces = "application/json")
+    public String checkIdTrainer(@RequestParam("id_trainer") int id) {
+        Trainer trainer = trainerService.findTrainerById(id);
+        return String.format("{ \"valid\": %b }", trainer != null); //customer null -> chưa có -> lỗi
+    }
+
     //======================================================== FOR INVOICE ========================================================//
     // Lấy danh sách invoices theo tháng và năm
     @GetMapping(value = "/invoicesrevenue/{year}", produces = "application/json")
     public ResponseEntity<?> getAllInvoice(@PathVariable("year") int year) {
         Map<Integer, Double> invoiceListGroupYear = invoiceService.invoiceListGroupYear(year);
         return new ResponseEntity<>(invoiceListGroupYear, HttpStatus.OK);
+    }
+
+    // Kiểm tra id có tồn tại hay không ?
+    @GetMapping(value = "/id_customer", produces = "application/json")
+    public String checkIdCustomer(@RequestParam("id_customer") int id) {
+        Customer customer = customerService.findCustomerById(id);
+        return String.format("{ \"valid\": %b }", customer != null); //customer null -> chưa có -> lỗi
     }
 
     // Lấy toàn bộ danh sách invoices
@@ -292,14 +335,65 @@ public class RestFullAPI {
         return "OK";
     }
 
-    // lấy số lượng customer
-    @GetMapping(value = "/count_customer_{year}", produces = "application/json")
-    public ResponseEntity<?> getCountCustomer(@PathVariable("year") int year) {
-        ArrayList<Integer> result = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
-            result.add(customerService.getCustomerByYearAndMonth(year, i + 1));
+
+    //======================================================== FOR COURSE SCHEDULE ========================================================//
+    // Lấy toàn bộ danh sách course schedule theo thứ
+    @GetMapping(value = "/course_schedule/th", produces = "application/json")
+    public ResponseEntity<?> getCourseScheduleByTh(@RequestParam("th") String th) {
+        List<CourseSchedule> course_scheduleList = courseScheduleService.findCourseScheduleByTH(th);
+        if (course_scheduleList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(course_scheduleList, HttpStatus.OK);
+    }
+
+    // Lấy toàn bộ danh sách course schedule
+    @GetMapping(value = "/course_schedule", produces = "application/json")
+    public ResponseEntity<?> getCourseSchedule() {
+        List<CourseSchedule> course_scheduleList = courseScheduleService.findCourseSchedule();
+        if (course_scheduleList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(course_scheduleList, HttpStatus.OK);
+    }
+
+    // Thêm course schedule mới
+    @PostMapping(value = "/course_schedule/add")
+    public String createNewCourseSchedule(@ModelAttribute CourseSchedule course_schedule, HttpServletResponse response) {
+        courseScheduleService.addCourseSchedule(course_schedule);
+        try {
+            response.sendRedirect("/admin_courseschedule");
+        } catch (IOException e) {
+            return "Cannot redirect";
+        }
+        return "OK";
+    }
+
+    // Chỉnh sửa thông tin course schedule
+    @PutMapping(value = "/course_schedule/edit/{id}", produces = "application/json")
+    public ResponseEntity<?> editCourseScheduleById(@PathVariable("id") int id, @RequestBody CourseSchedule course_schedule) {
+        if (courseScheduleService.findCourseScheduleById(id) == null) {
+            return new ResponseEntity<>("Course Schedule not found", HttpStatus.NOT_FOUND);
+        } else {
+            courseScheduleService.update(course_schedule);
+            return new ResponseEntity<>("Updated successfully!", HttpStatus.OK);
+        }
+    }
+
+    // Xóa course schedule
+    @DeleteMapping(value = "/course_schedule/delete/{id}")
+    public ResponseEntity<?> deleteCourseScheduleById(@PathVariable("id") int id) {
+        if (courseScheduleService.findCourseScheduleById(id) == null) {
+            return ResponseEntity.badRequest().body("Course Schedule not found");
+        }
+        courseScheduleService.deleteById(id);
+        return ResponseEntity.ok("Deleted successfully!");
+    }
+
+    // Lấy course schedule theo id
+    @GetMapping(value = "course_schedule/{id}", produces = "application/json")
+    public CourseSchedule getCourseScheduleByTh(@PathVariable("id") int id) {
+        return courseScheduleService.findCourseScheduleById(id);
     }
 
 
